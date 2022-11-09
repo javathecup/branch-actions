@@ -1,4 +1,4 @@
-# Reliable App
+# Cloud Run Preview per branch using Github Actions
 
 ### Set up workload identity federation
 1- Enable the IAM, Resource Manager, Service Account Credentials, and Security Token Service (STS) APIs
