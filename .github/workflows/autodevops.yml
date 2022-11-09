@@ -2,7 +2,7 @@ name: deploy demo
 'on':
   push:
     branches:
-      - production
+      - main
       - staging
     pull_request:
       - feature-**
