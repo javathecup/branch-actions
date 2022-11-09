@@ -1,0 +1,95 @@
+name: deploy demo
+'on':
+  push:
+    branches:
+      - production
+      - staging
+    pull_request:
+      - feature-**
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - closed
+  workflow_dispatch:
+env:
+  REGION: us-central1
+  REGISTRY: us-central1-docker.pkg.dev
+  APP: autodevops
+jobs:
+  Build:
+    name: Build
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: 'actions/checkout@v3'
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v0
+        with:
+          token_format: access_token
+          workload_identity_provider: projects/468178889914/locations/global/workloadIdentityPools/github/providers/action
+          service_account: github-actions@reliable-app-367614.iam.gserviceaccount.com
+      - name: Login to GCR
+        uses: docker/login-action@v2
+        with:
+          registry: us-central1-docker.pkg.dev
+          username: oauth2accesstoken
+          password: '${{ steps.auth.outputs.access_token }}'
+      - id: docker-push-tagged
+        name: Tag Docker image and push to Google Artifact Registry
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.GCP_PROJECT}}/reliable/${{github.ref_name }}:${{ github.sha }}
+  Deploy:
+    name: deploy
+    needs:   Build
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v0
+        with:
+          token_format: access_token
+          workload_identity_provider: projects/468178889914/locations/global/workloadIdentityPools/github/providers/action
+          service_account: github-actions@reliable-app-367614.iam.gserviceaccount.com
+      - name: Deploy to Cloud Run
+        run: |-
+          gcloud run deploy ${{ env.APP }}-${GITHUB_REF##*/}${{github.event.pull_request.number }} \
+            --region $REGION \
+            --image ${{ env.REGISTRY }}/${{ env.GCP_PROJECT}}/reliable/${{ github.ref_name }}:${{ github.sha }} \
+            --platform managed \
+            --port 80 \
+            --set-secrets="GITHUB_ACTION_SECRET=GITHUB_ACTION_SECRET:latest" \
+            --allow-unauthenticated
+  Cleanup:
+    name: cleanup
+    if: github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v0
+        with:
+          token_format: access_token
+          workload_identity_provider: projects/468178889914/locations/global/workloadIdentityPools/github/providers/action
+          service_account: github-actions@reliable-app-367614.iam.gserviceaccount.com
+      - name: cleanup
+        run: |-
+          gcloud run services delete ${{ env.APP }}-merge${{github.event.pull_request.number }} \
+            --region $REGION \
+            --quiet

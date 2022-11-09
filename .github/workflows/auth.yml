@@ -1,0 +1,37 @@
+name: Deploy Cloud Run
+on:
+  workflow_call:
+    inputs:
+      cloud_run_name:
+        required: true
+        type: string
+      img:
+        required: true
+        type: string
+      workload_identity_provider:
+        required: true
+        type: string
+      service_account:
+        required: true
+        type: string
+jobs:
+  auth:
+    name: auth to GCP
+    runs-on: ubuntu-latest
+    steps:
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v0
+        with:
+          token_format: access_token
+          workload_identity_provider: ${{ inputs.workload_identity_provider }}
+          service_account: ${{ inputs.service_account }}
+      - name: Deploy to Cloud Run
+        run: |-
+          gcloud run deploy ${{ inputs.cloud_run_name }} \
+            --region $REGION \
+            --image ${{ inputs.img }} \
+            --platform managed \
+            --port 80 \
+            --set-secrets="GITHUB_ACTION_SECRET=GITHUB_ACTION_SECRET:latest" \
+            --allow-unauthenticated
