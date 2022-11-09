@@ -1,13 +1,11 @@
-# Github Actions and dynamic developer environments
-###
-gcloud set project PROJECT_ID
-
+# Reliable App
 
 ### Set up workload identity federation
 1- Enable the IAM, Resource Manager, Service Account Credentials, and Security Token Service (STS) APIs
 2- create a workload identity federation pool
 ```
 gcloud iam workload-identity-pools create "github" \
+  --project="${PROJECT_ID}" \
   --location="global" \
   --display-name="github action pool"
 ```
