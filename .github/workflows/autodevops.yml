@@ -15,7 +15,7 @@ name: deploy demo
 env:
   REGION: us-central1
   BASE_REGISTRY: us-central1-docker.pkg.dev
-  REGISTRY: reliable #change with artifact registry in your project
+  REGISTRY: branch-actions/reliable #change with artifact registry in your project
   workload_identity_provider: projects/634474131374/locations/global/workloadIdentityPools/branch-actions/providers/action #change with the provider that you have copied earlier
   service_account: workload-identity-user@branch-actions.iam.gserviceaccount.com #service account created
 jobs:
