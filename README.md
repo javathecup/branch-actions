@@ -3,6 +3,7 @@
 Changelog 
 - Working version achieved, web app shows error. 
 - Web app working, had to open up service accout permission. Need to refine.
+- Broke merging, deleted extra branches. 
 
 ### Set up workload identity federation
 1- Enable the IAM, Resource Manager, Service Account Credentials, and Security Token Service (STS) APIs
