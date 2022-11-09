@@ -16,8 +16,8 @@ env:
   REGION: us-central1
   BASE_REGISTRY: us-central1-docker.pkg.dev
   REGISTRY: reliable #change with artifact registry in your project
-  workload_identity_provider: projects/468178889914/locations/global/workloadIdentityPools/reliable/providers/action #change with the provider that you have copied earlier
-  service_account: github-actions@reliable-app-367614.iam.gserviceaccount.com #service account created
+  workload_identity_provider: projects/634474131374/locations/global/workloadIdentityPools/branch-actions/providers/action #change with the provider that you have copied earlier
+  service_account: workload-identity-user@branch-actions.iam.gserviceaccount.com #service account created
 jobs:
   Build:
     name: Build
@@ -67,8 +67,8 @@ jobs:
       contents: 'read'
       id-token: 'write'
     with:
-      workload_identity_provider: projects/468178889914/locations/global/workloadIdentityPools/reliable/providers/action  #change with the provider that you have copied earlier
-      service_account: github-actions@reliable-app-367614.iam.gserviceaccount.com #service account created
+      workload_identity_provider: projects/634474131374/locations/global/workloadIdentityPools/branch-actions/providers/action  #change with the provider that you have copied earlier
+      service_account: workload-identity-user@branch-actions.iam.gserviceaccount.com #service account created
       img: ${{needs.build.outputs.img}}
       cloud_run_name: ${GITHUB_REF##*/}${{github.event.pull_request.number }}
       region: us-central1
