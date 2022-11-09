@@ -1,5 +1,9 @@
 # Cloud Run Preview per branch using Github Actions
 
+Changelog 
+- Working version achieved, web app shows error. 
+- Web app working, had to open up service accout permission. Need to refine.
+
 ### Set up workload identity federation
 1- Enable the IAM, Resource Manager, Service Account Credentials, and Security Token Service (STS) APIs
 2- create a workload identity federation pool
