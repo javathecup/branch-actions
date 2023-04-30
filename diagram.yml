@@ -1,0 +1,42 @@
+name: Deploy Mermaid Diagram to GitHub Pages
+
+on:
+  push:
+    paths:
+      - 'diagram.mmd'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 14
+
+    - name: Install dependencies
+      run: |
+        npm install -g mermaid.cli
+
+    - name: Generate Mermaid Diagram
+      run: |
+        mmdc -i diagram.mmd -o diagram.png
+
+    - name: Create HTML file
+      run: |
+        echo '<!DOCTYPE html><html><head><title>Mermaid Diagram</title></head><body><img src="diagram.png" alt="Mermaid Diagram"></body></html>' > index.html
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./
+        allow_empty_commit: false
+
+    - name: Output GitHub Pages URL
+      run: |
+        echo "Deployed to: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
