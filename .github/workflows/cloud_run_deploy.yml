@@ -1,22 +1,7 @@
 name: Deploy Cloud Run
 on:
-  workflow_call:
-    inputs:
-      cloud_run_name:
-        required: true
-        type: string
-      img:
-        required: true
-        type: string
-      workload_identity_provider:
-        required: true
-        type: string
-      service_account:
-        required: true
-        type: string
-      region:
-        required: true
-        type: string
+  workflow_dispatch:
+  
 jobs:
   auth:
     name: auth to GCP
