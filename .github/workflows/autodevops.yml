@@ -1,16 +1,4 @@
 name: deploy demo
-'on':
-  push:
-    branches:
-      - main
-      - staging
-    pull_request:
-      - feature-**
-  pull_request:
-    types:
-      - opened
-      - reopened
-      - closed
   workflow_dispatch:
 env:
   REGION: us-central1
