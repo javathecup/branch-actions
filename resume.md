@@ -2,8 +2,9 @@
 
 ## **Technologies and Tools**
 
-- **Cloud Platforms**: **Google Cloud**, **AWS**, **Azure**  
-- **Programming Languages**: **Python**, **TypeScript**, **SQL**, **JavaScript**  
+- **Cloud Platforms**: **Kubernetes**, **Google Cloud**, **AWS**, **Azure**  
+- **Programming Languages**: **Python**, **TypeScript**, **SQL**, **JavaScript**
+- **Declarative Languages**: **HTML**, **SQL** **Terraform**, **Swift**, **GraphQL**
 - **DevOps Tools**: **Docker**, **Kubernetes**, **Terraform**, **GitLab CI**, **GitHub Actions**  
 - **Infrastructure**: **VMWare**, **Solidfire**, **Kubernetes**  
 - **APIs & Integrations**: **Google Cloud APIs**, **Firebase**, **GraphQL**, **REST APIs**  
